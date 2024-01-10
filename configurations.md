@@ -153,9 +153,9 @@
     **[Note]:** If you do not require Network Browsing, you do not need to start the `nmbd` service on a Unix domain member.
 
    ```
-        /usr/local/samba/sbin/smbd
-   	/usr/local/samba/sbin/winbindd
-	/usr/local/samba/sbin/nmbd
+   /usr/local/samba/sbin/smbd
+   /usr/local/samba/sbin/winbindd
+   /usr/local/samba/sbin/nmbd
    ```
         
 ## Testing configuration
