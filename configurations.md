@@ -47,15 +47,7 @@
  	/usr/local/samba/sbin/samba
 	```
 
-6a. Add the lines to the `etc/resolv.conf`:
-	```search polaris.org
-	   nameserver 192.168.122.10```
-
-6b. systemctl disable --now systemd-resolved.service
-
-7. Start samba: `/usr/local/samba/sbin/samba`
-
-8. Added aditional users to the domain:
+6. Added aditional users to the domain:
    ```bash
 	/usr/local/samba/bin/samba-tool user create Alice Alice1234
 	/usr/local/samba/bin/samba-tool user create Bob Apolo1969
@@ -84,14 +76,14 @@
 
 		nameserver 192.168.122.10
 		search polaris.org
-3. To configure Kerberos on the domain member, set the following in the `/etc/krb5.conf` file:
+2. To configure Kerberos on the domain member, set the following in the `/etc/krb5.conf` file:
 
         [libdefaults]
             		default_realm = POLARIS.ORG
             		dns_lookup_realm = false
             		dns_lookup_kdc = true
 
-4. Follow the installation from the Samba documentation:
+3. Follow the installation from the Samba documentation:
      ```bash
 	sudo -s
 	wget https://download.samba.org/pub/samba/stable/samba-4.18.5.tar.gz
@@ -103,7 +95,7 @@
 	make
 	sudo make install
 	 ```
-5. Configuring the `autorid` Back End:
+4. Configuring the `autorid` Back End:
 
 		[global]
 		       security = ADS
@@ -127,11 +119,11 @@
 		       idmap config * : backend = autorid
 		       idmap config * : range = 10000-24999999
 
-6. Reload the Samba configuration:
+5. Reload the Samba configuration:
 
         /usr/local/samba/bin/smbcontrol all reload-config
 
-7. Map the domain accounts to a local account to execute file operations on the domain member's file system as a different user than the account that requested the operation on the client:
+6. Map the domain accounts to a local account to execute file operations on the domain member's file system as a different user than the account that requested the operation on the client:
 
     * Add the following parameter to the `[global]` section of your smb.conf file:
     
@@ -140,7 +132,7 @@
     
     		!root = POLARIS\Administrator
 
-8. To join the host to an Active Directory (AD), enter:
+7. To join the host to an Active Directory (AD), enter:
 
 		/usr/local/samba/bin/net ads join -U administrator
 
@@ -148,7 +140,7 @@
 
 		/usr/local/samba/bin/samba-tool domain join samdom.example.com MEMBER -U administrator
 
-9. Start the `smbd`, `nmbd` and `winbindd`  services to have a fully functioning Unix domain member:
+8. Start the `smbd`, `nmbd` and `winbindd`  services to have a fully functioning Unix domain member:
 
     **[Note]:** If you do not require Network Browsing, you do not need to start the `nmbd` service on a Unix domain member.
 
