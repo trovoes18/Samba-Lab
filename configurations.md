@@ -11,7 +11,6 @@
 		`192.168.122.10 dc1.polaris.org dc1`
 
 3. Change to a static IP address in `/etc/netplan/50-cloud-init.yaml`:  
-	**Maybe I don't need the nameservers here!!**
     ```
     addresses: [192.168.122.10/24]
     gateway4: 192.168.122.1
@@ -47,7 +46,16 @@
 	# Start samba:
  	/usr/local/samba/sbin/samba
 	```
-6. Added aditional users to the domain:
+
+6a. Add the lines to the `etc/resolv.conf`:
+	```search polaris.org
+	   nameserver 192.168.122.10```
+
+6b. systemctl disable --now systemd-resolved.service
+
+7. Start samba: `/usr/local/samba/sbin/samba`
+
+8. Added aditional users to the domain:
    ```bash
 	/usr/local/samba/bin/samba-tool user create Alice Alice1234
 	/usr/local/samba/bin/samba-tool user create Bob Apolo1969
@@ -69,62 +77,6 @@
 
 1. `kinit administrator`
 2. `klist`
-
-------------------------------------------------------------------------------------
-**Step 6 is not 100% correct**
-6. Making sure that the /etc/resolv.conf file is not updated:
-		1. `systemctl stop NetworkManager`
-		2. `systemctl disable NetworkManager`
-
-		3. Stop and disable systemd-resolved service
-			`sudo systemctl disable --now systemd-resolved`
-
-		4. Remove the symlink file /etc/resolv.conf
-			`sudo unlink /etc/resolv.conf`
-
-		5. Create a new /etc/resolv.conf file
-			`touch /etc/resolv.conf`
-
-		6. Add the following lines to the etc/resolv.conf file
-		```
-			# Samba server IP address
-			nameserver 192.168.122.10
-
-			# fallback resolver
-			nameserver 8.8.8.8
-
-			# main domain for Samba
-			search polaris.org
-			```
-
-		7. Add attribute immutable to the file /etc/resolv.conf
-			`sudo chattr +i /etc/resolv.conf`
-------------------------------------------------------------------------------------
-
-6a. Add the lines to the `etc/resolv.conf`:
-	```search polaris.org
-	   nameserver 192.168.122.10```
-
-6b. systemctl disable --now systemd-resolved.service
-
-7. Start samba: `/usr/local/samba/sbin/samba`
-
-8. Verifies DNS
-	`host -t SRV _ldap._tcp.polaris.org.`
-	`host -t SRV _kerberos._udp.polaris.org.`
-	`host -t A dc1.polaris.org.`
-
--------------------------------------------------------------
-**Simply don't execute this part do that Kerberos can work as usual. USE THE DEFAUL KERBEROS THAT COMES WITH THE SOURCE INSTALATION OF SAMBA**
-### FAILED 
-1.During the execution of `./bootstrap.sh`systemctl status krb5-kdc.service` 
-
-Solution:
-1. sudo kdb5_util create -r POLARIS.ORG -s
-2. set a password.
-3. check if there is /var/lib/krb5kdc/principal existed.
-4. Then sudo service krb5-kdc restart
--------------------------------------------------------------
 
 ## Domain Member
 
