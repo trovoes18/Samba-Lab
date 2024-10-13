@@ -1,8 +1,6 @@
 FROM ubuntu:bionic-20180426
 
 WORKDIR /root
-COPY samba.sh .
-RUN chmod +x samba.sh && ./samba.sh
 
 # Update and Upgrade system
 RUN apt update

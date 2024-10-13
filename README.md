@@ -6,7 +6,7 @@ This repository provides penstesters and students with two intentionally vulnera
 
 
 ## Summary
-This repository walks you through setting up two AD pentesting labs: one with Samba (domain polaris.org) and the other using Windows Active Directory (domain polaris.local). Both labs use the same network setup, users, and vulnerabilities (where applicable), but differ in their environments and domain configurations. You can follow the full lab setup in this guides ([Samba Lab](Samba_configurations), [Windows Lab](Windows_configurations)).
+This repository walks you through setting up two AD pentesting labs: one with Samba (domain polaris.org) and the other using Windows Active Directory (domain polaris.local). Both labs use the same network setup, users, and vulnerabilities (where applicable), but differ in their environments and domain configurations. You can follow the full lab setup in this guides ([Samba Lab](./Samba%20Lab/Samba_configurations.md), [Windows Lab](./Microsoft%20AD%20Lab/Windows_configurations.md)).
 
 The topology includes several components such as the Domain Controller (DC), the Client Workstation (DM), and the Attacker
 machines (Attacker and Attacker2), all interconnected through the Switch (SW) to simulate a realistic
