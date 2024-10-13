@@ -1,11 +1,15 @@
 # Samba Lab
 
 ## Appliances
+To be able to go through this lab guide you need to download the latest Docker Images to your GNS3 environments by going to *Edit* -> *Preferences* -> *Docker Containers* -> *New* then add the `tiagodelgado/samba:1.0` and `tiagodelgado/samba-attacker:2.0` Docker Images.
+
 - DC (tiagodelgado/samba:1.0)
 - DM (tiagodelgado/samba:1.0)
 - Attacker (tiagodelgado/samba-attacker:2.0)
 - NAT
 - Switch
+
+After connecting the appliances you  are ready to start the lab configurations.
 
 ## Domain Controller
 1. Set the IP address through the `Edit config` file. [192.168.122.10]
@@ -41,7 +45,7 @@ cp /usr/local/samba/private/krb5.conf /etc/krb5.conf
 ```
 
 ### DHCP Server
-1. Install DHCP Server. [Add to Dockerfile]
+1. Install DHCP Server.
 ```bash
 apt install isc-dhcp-server
 ```
@@ -321,7 +325,7 @@ hashcat -m 13100 <hash_file> <wordlist>
 #### NTLM Relay
 ###### Preparation
 
-1. Configure SSH server on the attacker. [Install SSH through Dockerfile]
+1. Configure SSH server on the attacker.
 ```bash
 apt install openssh-server
 nano /etc/ssh/sshd_config -> PermitRootLogin yes

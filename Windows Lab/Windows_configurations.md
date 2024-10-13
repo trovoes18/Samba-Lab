@@ -7,6 +7,8 @@
 - NAT
 - Switch
 
+After connecting the appliances you  are ready to start the lab configurations.
+
 ## DC
 
 ### Configure the IP addresses and domain name
