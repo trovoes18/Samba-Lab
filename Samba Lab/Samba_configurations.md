@@ -1,7 +1,7 @@
 # Samba Lab
 
 ## Appliances
-To be able to go through this lab guide you need to download the latest Docker Images to your GNS3 environments by going to *Edit* -> *Preferences* -> *Docker Containers* -> *New* then add the `tiagodelgado/samba:1.0` and `tiagodelgado/samba-attacker:2.0` Docker Images.
+To be able to go through this lab guide you need to download the latest Docker Images to your GNS3 environments by going to *Edit* → *Preferences* → *Docker Containers* → *New* then add the `tiagodelgado/samba:1.0` and `tiagodelgado/samba-attacker:2.0` Docker Images.
 
 - DC (tiagodelgado/samba:1.0)
 - DM (tiagodelgado/samba:1.0)
